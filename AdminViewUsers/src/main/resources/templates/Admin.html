@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Manage Users</title>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Urbanist', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #EDDFC6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      background-color: #191A23;
+      color: #C0C2B0;
+      padding: 15px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .back-button {
+      background-color: transparent;
+      border: none;
+      color: #C0C2B0;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      padding: 5px 10px;
+      position: absolute;
+      left: 15px;
+      transition: color 0.3s;
+    }
+
+    .back-button:hover {
+      color: #EDDFC6;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 auto;
+    }
+
+    .container {
+      width: 60%;
+      margin: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 28px;
+      text-align: center;
+      color: #191A23;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #396B6E;
+      color: #fff;
+    }
+
+    td {
+      color: #191A23;
+    }
+
+    .message {
+      margin-top: 10px;
+      color: green;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+
+    .password-cell {
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle-password {
+      cursor: pointer;
+      margin-left: 10px;
+      color: #396B6E;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <!-- Back to Homepage Button -->
+  <a href="http://localhost:8094/Welcome" class="back-button">
+    <i class="fas fa-arrow-left"></i>&nbsp; Back to Homepage
+  </a>
+
+  <!-- Centered Logo -->
+  <div class="logo">
+    <i class="fas fa-book"></i> Admin - User Management
+  </div>
+</header>
+
+<div class="container">
+  <h1>Manage Users</h1>
+
+  <!-- Display success or error messages -->
+  <div class="message" th:if="${message}" th:text="${message}"></div>
+  <div class="error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+  <!-- Display users in a table -->
+  <table>
+    <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Username</th>
+      <th>Password</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.fullname}"></td>
+      <td th:text="${user.username}"></td>
+      <td class="password-cell">
+        <span th:text="${user.password}" class="password"></span>
+        <i class="fas fa-eye-slash toggle-password" onclick="togglePassword(this)"></i>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(users)}">
+      <td colspan="3" style="text-align: center;">No users found</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function togglePassword(icon) {
+    const passwordSpan = icon.previousElementSibling;
+    const isHidden = passwordSpan.getAttribute("data-hidden") === "true";
+
+    if (isHidden) {
+      passwordSpan.textContent = passwordSpan.getAttribute("data-password");
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      passwordSpan.setAttribute("data-password", passwordSpan.textContent);
+      passwordSpan.textContent = "**********";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+    passwordSpan.setAttribute("data-hidden", !isHidden);
+  }
+</script>
+</body>
+</html>

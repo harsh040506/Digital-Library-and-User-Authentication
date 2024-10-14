@@ -1,0 +1,142 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Users</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Urbanist', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #EDDFC6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background-color: #191A23;
+            color: #C0C2B0;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .container {
+            width: 60%;
+            margin: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            color: #191A23;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #396B6E;
+            color: #fff;
+        }
+        td {
+            color: #191A23;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #396B6E;
+            color: #EDDFC6;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2A4E50;
+        }
+        .message {
+            margin-top: 10px;
+            color: green;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <i class="fas fa-book"></i> Admin - User Management
+    </div>
+</header>
+
+<div class="container">
+    <h1>Manage Users</h1>
+
+    <!-- Display message -->
+    <div class="message" th:text="${message}"></div>
+
+    <!-- Display users in a table -->
+    <table>
+        <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.fullname}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Delete user form -->
+    <form id="deleteForm" method="post" action="/admin/delete">
+        <input type="text" name="username" placeholder="Enter username to delete" required>
+        <button type="submit">Delete User</button>
+    </form>
+
+</div>
+
+<script>
+    document.getElementById("deleteForm").addEventListener("submit", function(event) {
+        var username = document.querySelector("input[name='username']").value;
+        var confirmation = confirm("Are you sure you want to delete user: " + username + "?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>
